@@ -40,4 +40,44 @@ public class VehicleVariation {
     @Column(name = "fuel_system", nullable = false)
     private String fuelSystem;
 
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCc() {
+        return this.cc;
+    }
+
+    public void setCc(Integer cc) {
+        this.cc = cc;
+    }
+
+    public Date getImmatricolationMonth() {
+        return this.immatricolationMonth;
+    }
+
+    public void setImmatricolationMonth(Date immatricolationMonth) {
+        this.immatricolationMonth = immatricolationMonth;
+    }
+
+    public Integer getImmatricolationYear() {
+        return this.immatricolationYear;
+    }
+
+    public void setImmatricolationYear(Integer immatricolationYear) {
+        this.immatricolationYear = immatricolationYear;
+    }
+
+    public String getFuelSystem() {
+        return this.fuelSystem;
+    }
+
+    public void setFuelSystem(String fuelSystem) {
+        this.fuelSystem = fuelSystem;
+    }
+
 }
