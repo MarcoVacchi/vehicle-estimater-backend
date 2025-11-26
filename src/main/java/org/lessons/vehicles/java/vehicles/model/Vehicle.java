@@ -21,6 +21,7 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // sara un array
     @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
     @Size(min = 3, max = 100)
     @Column(name = "vehicle_type", nullable = false)
