@@ -47,7 +47,8 @@ public class Vehicle {
     private BigDecimal basePrice;
 
     @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 1000)
+    @Column(name = "img", length = 1000, nullable = false)
     private String img;
 
     // Tabelle collegate

@@ -1,5 +1,9 @@
 package org.lessons.vehicles.java.fuelDiscount.dto;
 
-public record FuelDiscountDTO() {
+import java.math.BigDecimal;
+
+public record FuelDiscountDTO(
+        String name,
+        BigDecimal discount) {
 
 }
