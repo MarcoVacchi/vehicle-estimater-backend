@@ -42,8 +42,13 @@ public class VehicleVariation {
     // sara un array
     @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
     @Size(min = 3, max = 100)
-    @Column(name = "fuel_system", nullable = false)
-    private String fuelSystem;
+    @Column(name = "fuel_system_it", nullable = false)
+    private String fuelSystemIt;
+
+    @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
+    @Size(min = 3, max = 100)
+    @Column(name = "fuel_system_en", nullable = false)
+    private String fuelSystemEn;
 
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
@@ -81,12 +86,20 @@ public class VehicleVariation {
         this.immatricolationYear = immatricolationYear;
     }
 
-    public String getFuelSystem() {
-        return this.fuelSystem;
+    public String getFuelSystemIt() {
+        return this.fuelSystemIt;
     }
 
-    public void setFuelSystem(String fuelSystem) {
-        this.fuelSystem = fuelSystem;
+    public void setFuelSystemIt(String fuelSystemIt) {
+        this.fuelSystemIt = fuelSystemIt;
+    }
+
+    public String getFuelSystemEn() {
+        return this.fuelSystemEn;
+    }
+
+    public void setFuelSystemEn(String fuelSystemEn) {
+        this.fuelSystemEn = fuelSystemEn;
     }
 
     public Vehicle getVehicle() {

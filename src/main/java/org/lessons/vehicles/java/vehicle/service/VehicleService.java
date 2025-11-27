@@ -31,7 +31,8 @@ public class VehicleService {
 
     private Vehicle toEntity(VehicleDTO dto) {
         Vehicle vehicle = new Vehicle();
-        vehicle.setVehicleType(dto.vehicleType());
+        vehicle.setVehicleTypeIt(dto.vehicleTypeIt());
+        vehicle.setVehicleTypeEn(dto.vehicleTypeEn());
         vehicle.setBrand(dto.brand());
         vehicle.setModel(dto.model());
         vehicle.setBasePrice(dto.basePrice());
@@ -46,7 +47,8 @@ public class VehicleService {
 
         return new VehicleDTO(
                 vehicle.getId(),
-                vehicle.getVehicleType(),
+                vehicle.getVehicleTypeIt(),
+                vehicle.getVehicleTypeEn(),
                 vehicle.getBrand(),
                 vehicle.getModel(),
                 vehicle.getBasePrice(),
@@ -63,7 +65,8 @@ public class VehicleService {
                 var.getCc(),
                 var.getImmatricolationMonth(),
                 var.getImmatricolationYear(),
-                var.getFuelSystem());
+                var.getFuelSystemIt(),
+                var.getFuelSystemEn());
     }
 
     // READ - un veicolo per ID
@@ -85,7 +88,8 @@ public class VehicleService {
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vehicle not found"));
 
-        vehicle.setVehicleType(dto.vehicleType());
+        vehicle.setVehicleTypeIt(dto.vehicleTypeIt());
+        vehicle.setVehicleTypeEn(dto.vehicleTypeEn());
         vehicle.setBrand(dto.brand());
         vehicle.setModel(dto.model());
         vehicle.setBasePrice(dto.basePrice());

@@ -30,8 +30,13 @@ public class Vehicle {
     // sara un array
     @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
     @Size(min = 3, max = 100)
-    @Column(name = "vehicle_type", nullable = false)
-    private String vehicleType;
+    @Column(name = "vehicle_type_it", nullable = false)
+    private String vehicleTypeIt;
+
+    @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
+    @Size(min = 3, max = 100)
+    @Column(name = "vehicle_type_en", nullable = false)
+    private String vehicleTypeEn;
 
     @NotBlank(message = "This field cannot be blank, null or empty, and must be  min 3 char and max 100 char")
     @Size(min = 3, max = 100)
@@ -64,12 +69,20 @@ public class Vehicle {
         this.id = id;
     }
 
-    public String getVehicleType() {
-        return this.vehicleType;
+    public String getVehicleTypeIt() {
+        return this.vehicleTypeIt;
     }
 
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicleTypeIt(String vehicleTypeIt) {
+        this.vehicleTypeIt = vehicleTypeIt;
+    }
+
+    public String getVehicleTypeEn() {
+        return this.vehicleTypeEn;
+    }
+
+    public void setVehicleTypeEn(String vehicleTypeEn) {
+        this.vehicleTypeEn = vehicleTypeEn;
     }
 
     public String getBrand() {
