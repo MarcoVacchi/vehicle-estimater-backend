@@ -1,5 +1,10 @@
 package org.lessons.vehicles.java.vehicleVariation.dto;
 
-public record VehicleVariationDTO() {
+import java.sql.Date;
 
+public record VehicleVariationDTO(
+                Integer cc,
+                Date immatricolationMonth,
+                Integer immatricolationYear,
+                String fuelSystem) {
 }

@@ -1,12 +1,18 @@
-package org.lessons.vehicles.java.vehicles.model;
+package org.lessons.vehicles.java.vehicle.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.lessons.vehicles.java.vehicleVariation.model.VehicleVariation;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -43,6 +49,11 @@ public class Vehicle {
     @NotBlank(message = "This field cannot be blank, null or empty, and must be min 3 char and max 100 char")
     @Size(min = 3, max = 100)
     private String img;
+
+    // Tabelle collegate
+
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<VehicleVariation> vehicleVariations = new ArrayList<>();
 
     public Integer getId() {
         return this.id;
@@ -90,6 +101,14 @@ public class Vehicle {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public List<VehicleVariation> getVehicleVariations() {
+        return this.vehicleVariations;
+    }
+
+    public void setVehicleVariations(List<VehicleVariation> vehicleVariations) {
+        this.vehicleVariations = vehicleVariations;
     }
 
 }
