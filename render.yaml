@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: starter
+    autoDeploy: true
+    branch: main
+    buildCommand: ""  # se uso Docker non serve build separata
+    startCommand: ""  # Dockerfile già definisce ENTRYPOINT
