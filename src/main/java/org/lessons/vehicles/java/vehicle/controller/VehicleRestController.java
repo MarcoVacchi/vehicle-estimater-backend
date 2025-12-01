@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "localhost")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/vehicle")
 public class VehicleRestController {
