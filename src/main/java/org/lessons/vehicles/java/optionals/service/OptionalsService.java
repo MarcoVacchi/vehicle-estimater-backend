@@ -45,8 +45,8 @@ public class OptionalsService {
                 optionals.getNameEn(),
                 optionals.getNameIt(),
                 optionals.getPrice(),
-                optionals.getVehicleTypeEn(),
-                optionals.getVehicleTypeIt());
+                optionals.getVehicleTypeIt(),
+                optionals.getVehicleTypeEn());
 
     }
 
