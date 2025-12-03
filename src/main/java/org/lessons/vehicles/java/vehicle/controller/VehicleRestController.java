@@ -47,38 +47,39 @@ public class VehicleRestController {
         }
     }
 
-    // POST
-    @PostMapping
-    public ResponseEntity<VehicleDTO> createVehicle(@Valid @RequestBody VehicleDTO vehicleDTO) {
-        try {
-            VehicleDTO created = vehicleService.createVehicle(vehicleDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+    // // POST
+    // @PostMapping
+    // public ResponseEntity<VehicleDTO> createVehicle(@Valid @RequestBody
+    // VehicleDTO vehicleDTO) {
+    // try {
+    // VehicleDTO created = vehicleService.createVehicle(vehicleDTO);
+    // return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    // } catch (Exception e) {
+    // return ResponseEntity.badRequest().build();
+    // }
+    // }
 
-    // PUT
-    @PutMapping("/{id}")
-    public ResponseEntity<VehicleDTO> updateVehicle(
-            @PathVariable Integer id,
-            @Valid @RequestBody VehicleDTO vehicleDTO) {
-        try {
-            VehicleDTO updated = vehicleService.updateVehicle(id, vehicleDTO);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // // PUT
+    // @PutMapping("/{id}")
+    // public ResponseEntity<VehicleDTO> updateVehicle(
+    // @PathVariable Integer id,
+    // @Valid @RequestBody VehicleDTO vehicleDTO) {
+    // try {
+    // VehicleDTO updated = vehicleService.updateVehicle(id, vehicleDTO);
+    // return ResponseEntity.ok(updated);
+    // } catch (RuntimeException e) {
+    // return ResponseEntity.notFound().build();
+    // }
+    // }
 
-    // DELETE
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Integer id) {
-        try {
-            vehicleService.deleteVehicle(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // // DELETE
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deleteVehicle(@PathVariable Integer id) {
+    // try {
+    // vehicleService.deleteVehicle(id);
+    // return ResponseEntity.noContent().build();
+    // } catch (RuntimeException e) {
+    // return ResponseEntity.notFound().build();
+    // }
+    // }
 }
