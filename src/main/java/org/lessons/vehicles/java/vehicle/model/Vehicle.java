@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lessons.vehicles.java.quoted.model.Quoted;
 import org.lessons.vehicles.java.vehicleVariation.model.VehicleVariation;
 
 import jakarta.persistence.CascadeType;
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -60,6 +62,9 @@ public class Vehicle {
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<VehicleVariation> vehicleVariations = new ArrayList<>();
+
+    @OneToOne
+    private List<Quoted> quoted = new ArrayList<>();
 
     public Integer getId() {
         return this.id;
