@@ -12,6 +12,8 @@ import org.lessons.vehicles.java.vehicle.model.Vehicle;
 import org.lessons.vehicles.java.vehicleVariation.dto.VehicleVariationDTO;
 import org.lessons.vehicles.java.vehicleVariation.model.VehicleVariation;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class QuotedService {
@@ -86,5 +88,22 @@ public class QuotedService {
                 : List.of();
 
         return new QuotedDTO(vehicleList, optionalList);
+    }
+
+    private Quoted updateModelFromDTO(Quoted existingQuoted, QuotedDTO quotedDTO) {
+
+        return existingQuoted;
+    }
+
+    public QuotedDTO updateQuoted(Integer id, QuotedDTO quotedDTO) {
+        Quoted existingQuoted = quotedRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Quotation not found with id: " + id));
+
+        Quoted updatedQuoted = updateModelFromDTO(existingQuoted, quotedDTO);
+
+        Quoted savedQuoted = quotedRepository.save(updatedQuoted);
+
+        return toDTO(savedQuoted);
     }
 }
