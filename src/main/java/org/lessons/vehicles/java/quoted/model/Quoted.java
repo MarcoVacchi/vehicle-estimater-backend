@@ -43,4 +43,5 @@ public class Quoted {
     public List<Optionals> getOptionals() {
         return optionals;
     }
+
 }
