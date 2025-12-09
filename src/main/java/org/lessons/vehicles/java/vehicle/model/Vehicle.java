@@ -57,8 +57,6 @@ public class Vehicle {
     @Column(name = "img", length = 1000, nullable = false)
     private String img;
 
-    // Tabelle collegate
-
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<VehicleVariation> vehicleVariations = new ArrayList<>();
 
