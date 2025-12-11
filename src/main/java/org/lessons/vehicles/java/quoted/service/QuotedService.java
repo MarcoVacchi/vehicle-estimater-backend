@@ -12,6 +12,8 @@ import org.lessons.vehicles.java.optionals.repository.OptionalsRepository;
 import org.lessons.vehicles.java.quoted.dto.QuotedDTO;
 import org.lessons.vehicles.java.quoted.model.Quoted;
 import org.lessons.vehicles.java.quoted.repository.QuotedRepository;
+import org.lessons.vehicles.java.user.model.User;
+import org.lessons.vehicles.java.user.repository.UserRepository;
 import org.lessons.vehicles.java.vehicle.dto.VehicleDTOToQuoted;
 import org.lessons.vehicles.java.vehicle.model.Vehicle;
 import org.lessons.vehicles.java.vehicle.repository.VehicleRepository;
@@ -30,17 +32,20 @@ public class QuotedService {
     private final VehicleRepository vehicleRepository;
     private final OptionalsRepository optionalsRepository;
     private final VehicleVariationRepository vehicleVariationRepository;
+    private final UserRepository userRepository;
 
     public QuotedService(QuotedRepository quotedRepository,
             PriceCalculatorService priceCalculatorService,
             VehicleRepository vehicleRepository,
             OptionalsRepository optionalsRepository,
-            VehicleVariationRepository vehicleVariationRepository) {
+            VehicleVariationRepository vehicleVariationRepository,
+            UserRepository userRepository) {
         this.quotedRepository = quotedRepository;
         this.priceCalculatorService = priceCalculatorService;
         this.vehicleRepository = vehicleRepository;
         this.optionalsRepository = optionalsRepository;
         this.vehicleVariationRepository = vehicleVariationRepository;
+        this.userRepository = userRepository;
     }
 
     public List<QuotedDTO> getAllQuoted() {
@@ -98,7 +103,6 @@ public class QuotedService {
                 : currentYear;
 
         if (immYear == currentYear) {
-            // Nessuna maggiorazione
         } else if (immYear >= currentYear - 2) {
             price = price.multiply(BigDecimal.valueOf(1.04));
         } else if (immYear >= currentYear - 4) {
@@ -135,7 +139,6 @@ public class QuotedService {
             total = total.add(v.getBasePrice() != null ? v.getBasePrice() : BigDecimal.ZERO);
         }
 
-        // Aggiungi il prezzo degli optionals
         if (quoted.getOptionals() != null) {
             for (Optionals o : quoted.getOptionals()) {
                 if (o.getPrice() != null) {
@@ -152,7 +155,6 @@ public class QuotedService {
             total = total.multiply(BigDecimal.valueOf(0.97));
         }
 
-        // Sconto 2% se l'anno di immatricolazione è l'anno corrente
         if (selectedVariation != null
                 && selectedVariation.getImmatricolationYear() != null
                 && selectedVariation.getImmatricolationYear() == Year.now().getValue()) {
@@ -183,6 +185,11 @@ public class QuotedService {
         if (quoted == null) {
             return null;
         }
+
+        Integer userId = quoted.getUser() != null ? quoted.getUser().getId() : null;
+        String userName = quoted.getUser() != null ? quoted.getUser().getName() : null;
+        String userSurname = quoted.getUser() != null ? quoted.getUser().getSurname() : null;
+        String userMail = quoted.getUser() != null ? quoted.getUser().getEmail() : null;
 
         List<VehicleDTOToQuoted> vehicles = List.of();
 
@@ -216,11 +223,26 @@ public class QuotedService {
 
         BigDecimal finalPrice = calculateFinalPrice(quoted);
 
-        return new QuotedDTO(vehicles, vehicleVariationId, optionals, finalPrice);
+        return new QuotedDTO(userId, userName, userSurname, userMail, vehicles, vehicleVariationId, optionals,
+                finalPrice);
     }
 
     private Quoted toEntity(QuotedDTO quotedDTO) {
         Quoted quoted = new Quoted();
+
+        if (quotedDTO.userEmail() != null) {
+            User user = userRepository.findByEmail(quotedDTO.userEmail())
+                    .orElseGet(() -> {
+                        User newUser = new User();
+                        newUser.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
+                        newUser.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
+                        newUser.setEmail(quotedDTO.userEmail() != null ? quotedDTO.userEmail() : "default@email.com");
+                        newUser.setPassword("temporary");
+                        newUser.setIsFirstQuotation(true);
+                        return userRepository.save(newUser);
+                    });
+            quoted.setUser(user);
+        }
 
         if (quotedDTO.vehicleDTOToQuoted() != null && !quotedDTO.vehicleDTOToQuoted().isEmpty()) {
             VehicleDTOToQuoted vDTO = quotedDTO.vehicleDTOToQuoted().get(0);
@@ -278,6 +300,20 @@ public class QuotedService {
         Quoted existingQuoted = quotedRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Quotation not found with id: " + id));
+
+        if (quotedDTO.userId() != null) {
+            User user = userRepository.findById(quotedDTO.userId())
+                    .orElseGet(() -> {
+                        User newUser = new User();
+                        newUser.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
+                        newUser.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
+                        newUser.setEmail(quotedDTO.userEmail() != null ? quotedDTO.userEmail() : "default@email.com");
+                        newUser.setPassword("temporary");
+                        newUser.setIsFirstQuotation(true);
+                        return userRepository.save(newUser);
+                    });
+            existingQuoted.setUser(user);
+        }
 
         if (existingQuoted.getOptionals() == null) {
             existingQuoted.setOptionals(new ArrayList<>());

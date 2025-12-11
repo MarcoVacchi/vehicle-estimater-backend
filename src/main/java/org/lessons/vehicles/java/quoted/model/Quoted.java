@@ -3,6 +3,7 @@ package org.lessons.vehicles.java.quoted.model;
 import java.math.BigDecimal;
 import java.util.List;
 import org.lessons.vehicles.java.optionals.model.Optionals;
+import org.lessons.vehicles.java.user.model.User;
 import org.lessons.vehicles.java.vehicle.model.Vehicle;
 import org.lessons.vehicles.java.vehicleVariation.model.VehicleVariation;
 
@@ -26,6 +27,10 @@ public class Quoted {
     @ManyToOne
     @JoinColumn(name = "vehicle_variation_id")
     private VehicleVariation vehicleVariation;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany
     @JoinTable(name = "quoted_optionals", joinColumns = @JoinColumn(name = "quoted_id"), inverseJoinColumns = @JoinColumn(name = "optional_id"))
@@ -61,6 +66,14 @@ public class Quoted {
 
     public void setVehicleVariation(VehicleVariation vehicleVariation) {
         this.vehicleVariation = vehicleVariation;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Optionals> getOptionals() {
