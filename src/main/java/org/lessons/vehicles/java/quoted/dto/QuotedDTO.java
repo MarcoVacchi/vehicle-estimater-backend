@@ -12,12 +12,9 @@ public record QuotedDTO(
         String userName,
         String userSurname,
         String userMail,
+        String userEmail,
         List<VehicleDTOToQuoted> vehicleDTOToQuoted,
         Integer vehicleVariationId,
         List<OptionalDTOtoQuoted> optionalDTOtoQuoted,
-        BigDecimal finalPrice,
-        // LA NUOVA LISTA VA QUI, DENTRO LE TONDE:
-        List<PriceAdjustment> priceAdjustments 
-) {
-    // Le parentesi graffe rimangono vuote se non hai costruttori personalizzati o metodi extra
+        BigDecimal finalPrice) {
 }
