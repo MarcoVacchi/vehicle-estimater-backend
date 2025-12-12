@@ -55,6 +55,18 @@ public class QuotedService {
                 .collect(Collectors.toList());
     }
 
+    public List<QuotedDTO> getQuotedByUserMail(String email) {
+        List<Quoted> quotedEntities = quotedRepository.findByUserMail(email);
+
+        if (quotedEntities.isEmpty()) {
+            return List.of();
+        }
+
+        return quotedEntities.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private VehicleDTOToQuoted toVehicleDTO(Vehicle vehicle) {
         List<VehicleVariationDTO> variationList = vehicle.getVehicleVariations() != null
                 ? vehicle.getVehicleVariations().stream()
@@ -186,7 +198,7 @@ public class QuotedService {
         if (quoted == null) {
             return null;
         }
-
+        Integer id = quoted.getId();
         Integer userId = quoted.getUser() != null ? quoted.getUser().getId() : null;
         String userName = quoted.getUser() != null ? quoted.getUser().getName() : null;
         String userSurname = quoted.getUser() != null ? quoted.getUser().getSurname() : null;
@@ -224,7 +236,7 @@ public class QuotedService {
 
         BigDecimal finalPrice = calculateFinalPrice(quoted);
 
-        return new QuotedDTO(userId, userName, userSurname, userMail, vehicles, vehicleVariationId, optionals,
+        return new QuotedDTO(id, userId, userName, userSurname, userMail, vehicles, vehicleVariationId, optionals,
                 finalPrice);
     }
 
@@ -239,8 +251,8 @@ public class QuotedService {
             user.setPassword("temporary");
             user.setIsFirstQuotation(true);
 
-            user = userRepository.save(user); // salva
-            quoted.setUser(user); // associa
+            user = userRepository.save(user);
+            quoted.setUser(user);
         }
 
         if (quotedDTO.vehicleDTOToQuoted() != null && !quotedDTO.vehicleDTOToQuoted().isEmpty()) {
