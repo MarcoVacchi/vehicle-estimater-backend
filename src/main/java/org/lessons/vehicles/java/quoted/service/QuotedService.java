@@ -56,7 +56,7 @@ public class QuotedService {
     }
 
     public List<QuotedDTO> getQuotedByUserMail(String email) {
-        List<Quoted> quotedEntities = quotedRepository.findByUserMail(email);
+        List<Quoted> quotedEntities = quotedRepository.findByUserEmail(email);
 
         if (quotedEntities.isEmpty()) {
             return List.of();
@@ -65,6 +65,7 @@ public class QuotedService {
         return quotedEntities.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+
     }
 
     private VehicleDTOToQuoted toVehicleDTO(Vehicle vehicle) {
@@ -192,6 +193,13 @@ public class QuotedService {
             total = total.subtract(BigDecimal.valueOf(100));
         }
 
+        boolean isFirstQuotation = quoted.getUser() != null &&
+                quoted.getUser().getIsFirstQuotation();
+
+        if (isFirstQuotation) {
+            total = total.multiply(BigDecimal.valueOf(0.98));
+        }
+
         return total;
     }
 
@@ -236,7 +244,7 @@ public class QuotedService {
                         .collect(Collectors.toList())
                 : List.of();
 
-        BigDecimal finalPrice = calculateFinalPrice(quoted);
+        BigDecimal finalPrice = quoted.getFinalPrice() != null ? quoted.getFinalPrice() : calculateFinalPrice(quoted);
 
         return new QuotedDTO(id, userId, userName, userSurname, userMail, userEmail, vehicles, vehicleVariationId,
                 optionals,
@@ -247,15 +255,32 @@ public class QuotedService {
         Quoted quoted = new Quoted();
 
         if (quotedDTO.userMail() != null || quotedDTO.userName() != null) {
-            User user = new User();
-            user.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
-            user.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
-            user.setMail(quotedDTO.userMail() != null ? quotedDTO.userMail() : "noemail-" + UUID.randomUUID());
-            user.setEmail(quotedDTO.userEmail() != null ? quotedDTO.userEmail() : "noemail-" + UUID.randomUUID());
-            user.setPassword("temporary");
-            user.setIsFirstQuotation(true);
+            User user;
 
-            user = userRepository.save(user);
+            if (quotedDTO.userEmail() != null) {
+                user = userRepository.findByEmail(quotedDTO.userEmail())
+                        .orElseGet(() -> {
+                            User newUser = new User();
+                            newUser.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
+                            newUser.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
+                            newUser.setMail(
+                                    quotedDTO.userMail() != null ? quotedDTO.userMail() : quotedDTO.userEmail());
+                            newUser.setEmail(quotedDTO.userEmail());
+                            newUser.setPassword("temporary");
+                            newUser.setIsFirstQuotation(true);
+                            return userRepository.save(newUser);
+                        });
+            } else {
+                user = new User();
+                user.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
+                user.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
+                user.setMail("noemail-" + UUID.randomUUID());
+                user.setEmail("noemail-" + UUID.randomUUID());
+                user.setPassword("temporary");
+                user.setIsFirstQuotation(true);
+                user = userRepository.save(user);
+            }
+
             quoted.setUser(user);
         }
 
@@ -297,9 +322,17 @@ public class QuotedService {
     public QuotedDTO createQuoted(QuotedDTO quotedDTO) {
         Quoted newQuoted = toEntity(quotedDTO);
 
+        boolean wasFirstQuotation = newQuoted.getUser() != null && newQuoted.getUser().getIsFirstQuotation();
+
         newQuoted.setFinalPrice(calculateFinalPrice(newQuoted));
 
         Quoted savedQuoted = quotedRepository.save(newQuoted);
+
+        if (wasFirstQuotation && savedQuoted.getUser() != null) {
+            User user = savedQuoted.getUser();
+            user.setIsFirstQuotation(false);
+            userRepository.save(user);
+        }
 
         return toDTO(savedQuoted);
     }
@@ -323,6 +356,7 @@ public class QuotedService {
                         newUser.setName(quotedDTO.userName() != null ? quotedDTO.userName() : "default");
                         newUser.setSurname(quotedDTO.userSurname() != null ? quotedDTO.userSurname() : "default");
                         newUser.setMail(quotedDTO.userMail() != null ? quotedDTO.userMail() : "default@email.com");
+                        newUser.setEmail(quotedDTO.userEmail() != null ? quotedDTO.userEmail() : "default@email.com");
                         newUser.setPassword("temporary");
                         newUser.setIsFirstQuotation(true);
                         return userRepository.save(newUser);
