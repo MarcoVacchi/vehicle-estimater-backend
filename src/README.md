@@ -493,3 +493,4 @@ Per supporto e informazioni: [your-email@example.com]
 - Il database MySQL è hostato online e gestibile via phpMyAdmin
 - Backend deployato su Render con Docker per scalabilità
 - Frontend React ottimizzato con Tailwind CSS per performance e UX
+<!-- fine file -->
