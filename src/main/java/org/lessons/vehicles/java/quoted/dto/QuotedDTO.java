@@ -12,9 +12,12 @@ public record QuotedDTO(
         String userName,
         String userSurname,
         String userMail,
-        String userEmail,
+        String userEmail, // <--- Nota: Vedo dai log che hai due campi email ora (mail e email)
         List<VehicleDTOToQuoted> vehicleDTOToQuoted,
         Integer vehicleVariationId,
         List<OptionalDTOtoQuoted> optionalDTOtoQuoted,
-        BigDecimal finalPrice) {
-}
+        BigDecimal finalPrice,
+        
+        // IL CAMPO MANCANTE ERA QUESTO:
+        List<PriceAdjustment> priceAdjustments 
+) {}

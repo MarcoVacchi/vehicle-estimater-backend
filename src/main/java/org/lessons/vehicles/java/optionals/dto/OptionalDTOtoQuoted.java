@@ -6,5 +6,7 @@ public record OptionalDTOtoQuoted(
         Integer id,
         String vehicleTypeIt,
         String vehicleTypeEn,
+        String nameIt,
+        String nameEn,
         BigDecimal price) {
 }

@@ -34,7 +34,6 @@ Sistema di preventivazione per veicoli full-stack con backend Java Spring Boot, 
 ### Frontend
 - **React** (biblioteca UI)
 - **Tailwind CSS** (styling utility-first)
-- **Axios** (HTTP client)
 
 ### DevOps & Deployment
 - **Docker** (containerizzazione)

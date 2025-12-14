@@ -35,19 +35,22 @@ public class PriceCalculatorService {
 
         if (immYear < currentYear) { // Solo se diverso dall'anno corrente
             if (immYear >= currentYear - 2) {
-                yearMultiplier = BigDecimal.valueOf(1.04);
+                yearMultiplier = BigDecimal.valueOf(0.96);
             } else if (immYear >= currentYear - 4) {
-                yearMultiplier = BigDecimal.valueOf(1.08);
+                yearMultiplier = BigDecimal.valueOf(0.92);
             } else {
-                yearMultiplier = BigDecimal.valueOf(1.12);
+                yearMultiplier = BigDecimal.valueOf(0.88);
             }
         }
 
-        if (yearMultiplier.compareTo(BigDecimal.ONE) > 0) {
-            BigDecimal increasedPrice = price.multiply(yearMultiplier);
-            BigDecimal diff = increasedPrice.subtract(price);
-            adjustments.add(new PriceAdjustment("Fattore Anzianità (" + immYear + ")", diff));
-            price = increasedPrice;
+        if (yearMultiplier.compareTo(BigDecimal.ONE) != 0) {
+            BigDecimal newPrice = price.multiply(yearMultiplier);
+            
+            // diff sarà NEGATIVO (es. 9600 - 10000 = -400)
+            BigDecimal diff = newPrice.subtract(price); 
+            
+            adjustments.add(new PriceAdjustment("Svalutazione Anzianità (" + immYear + ")", diff));
+            price = newPrice;
         }
 
         // 3. ALIMENTAZIONE
